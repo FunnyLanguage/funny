@@ -1,0 +1,20 @@
+$$ sys.macro
+$$
+$$ system macro statement
+$$
+
+statement: {define template {name}: {template} as {statement}}
+> ^{name}, {template} > %{statement}, {statement}
+= NIL
+
+statement: {define {var} as {val}}
+> NIL
+= (define ^{var} ^{val})
+
+statement: {define function {name}: {function} as {statement}}
+> ^{name}, {function} > ^{name}, \{(^{name} #{function})\}
+= (define (^{name} &{function}) @{statement})
+
+statement: {lambda {args}: {expression}}
+> NIL
+= (lambda (^{args}) @{expression})
