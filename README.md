@@ -42,5 +42,5 @@
 联系方式
 ===================================
     qq群：111086164  
-    邮箱：fguangping@gmail.com  
+    邮箱：fguangping@gmail.com/fanguangping@163.com  
 
