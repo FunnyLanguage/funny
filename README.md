@@ -7,40 +7,45 @@
     
 泛语言采用的是一种带参数的DFA技术。为什么是DFA，而不是NFA？那是因为DFA没有二义性，所以易于处理，而NFA需要转换为DFA，这种转换在带参数的情况下显得更加困难，完全没有必要。所以在定义语法模板的时候，必须原生就是DFA的。  
     
-下面是泛语言在ubuntu上运行的一个示例：  
+下面是泛语言在RHEL上运行的几个示例：  
 
-    fgp@ubuntu-desktop:~/funny$ ./funny
-    Welcome to FUNNY programming world. Type {exit} to exit.
-    > {define function {qsum}:
+[root@192 funny]# ./funny
+Welcome to FUNNY programming world. Type {exit} to exit.
+> {define function {qsum}:
       {the sum of squares {a} and {b}} as
         {{{a}*{a}}+{{b}*{b}}}}
-    ok
-    > {the sum of squares {2} and {3}}
-    13
-    > {define function {abs}: 
+qsum
+> {the sum of squares {2} and {3}}
+13
+> {define function {abs}: 
       {the absolute value of {x}} as 
         {for the conditions: 
            when {{x}>{0}} then {x},
            when {{x}={0}} then {0},
            when {{x}<{0}} then {-{x}}}}
-    ok
-    > {the absolute value of {-2}}
-    2
-    > {the sum of squares {2} and {the absolute value of {-2}}}
-    8
-    > {the absolute value of {the sum of squares {2} and {-3}}}
-    13
-    > {exit}
-    fgp@ubuntu-desktop:~/funny$ 
+abs
+> {the absolute value of {-2}}
+2
+> {the sum of squares {2} and {the absolute value of {-2}}}
+8
+> {the absolute value of {the sum of squares {2} and {-3}}}
+13
+> {define function {copy-files}:
+  {copy files {n} times from {src} to {dest}} as
+    {if {{n}>{0}} then {begin procedure 
+       {run command {copy file from {src} to {append string {dest} {convert atom {n} to string}}}} 
+       {copy files {{n}-{1}} times from {src} to {dest}}}}}
+copy-files
+> {copy files {4} times from {"/home/fgp/temp/abc"} to {"/home/fgp/temp/def"}}
+()
+> {exit}
+Goodbye!
+[root@192 funny]#
 
 希望大家能喜欢上这门语言，并带动它发展！  
 
-致谢
-===================================
-感谢petermichaux在github分享bootstrap-scheme的代码，泛语言关于将其翻译成的scheme语言如何运行方面，参考了bootstrap-scheme的代码
-    
 联系方式
 ===================================
     qq群：111086164  
-    邮箱：fguangping@gmail.com/fanguangping@163.com  
+    邮箱：fanguangping@163.com  
 

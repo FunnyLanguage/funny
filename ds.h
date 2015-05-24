@@ -1,54 +1,50 @@
 /*
  * Funny Language - a free style programming language.
- * Copyright (C) 2014 by fanguangping. Email: fguangping@gmail.com
+ * Copyright (C) 2014 by fanguangping (fanguangping@163.com)
  *
- * This program is free software: you can redistribute it and/or
- * modify it under the terms of the GNU Affero General Public
- * License version 3 as published by the Free Software Foundation.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License version 3 for more details.
- *
- * You should have received a copy of the GNU Affero General Public
- * License version 3 along with this program. If not, see
- * <http://www.gnu.org/licenses/>.
  */
 
 #ifndef _DS_H_
 #define _DS_H_
 
-#define TRUE    1
-#define FALSE   0
+#include <stdio.h>
 
-void exit_when_out_of_memory(void *element);
+#ifdef TRUE
+#undef TRUE
+#endif
+#define TRUE 1
+
+#ifdef FALSE
+#undef FALSE
+#endif
+#define FALSE 0
 
 /****************** String ******************/
 
 typedef char* String;
 
-char *init_string();
-char *copy_string(char *str);
-char *trim_string(char *str);
-char *substr_before(char *str, char c);
-char *substr_between(char *str, char a, char b);
-char *substr_after(char *str, char c);
-char *dyna_strcat(char *str, char *append);
-char *append_char(char *str, char c);
+String init_string();
+String copy_string(String str);
+String trim_string(String str);
+String substr_before(String str, char c);
+String substr_between(String str, char a, char b);
+String substr_after(String str, char c);
+String dyna_strcat(String str, char *append);
+String append_char(String str, char c);
+String* split_string(String string, const char delimiter);
+String* split_string_once(String string, const char delimiter);
 int equals_string(void *a, void *b);
 int hash_code_string(void *key);
+char *strlwr(char *str);
 
 /****************** Queue ******************/
 
-typedef struct _QueueNode
-{
+typedef struct _QueueNode {
 	void *element;
 	struct _QueueNode *next;
 } QueueNode;
 
-typedef struct _Queue
-{
+typedef struct _Queue {
 	struct _QueueNode *head;
 	struct _QueueNode *tail;
 } Queue;
@@ -57,16 +53,17 @@ Queue *init_queue();
 void enqueue(Queue *queue, void *element);
 void *dequeue(Queue *queue);
 void *get_queue_element(Queue *queue, int index);
-int  is_queue_empty(Queue *queue);
+int is_queue_empty(Queue *queue);
 void clear_queue(Queue *queue);
 void append_queue(Queue *q1, Queue *q2);
+int contains_queue_element(Queue *queue, void *element, int (*equals)(void *e1, void *e2));
+int count_queue_element(Queue *queue);
 
 /****************** HashTable ******************/
 
 #define HASHTABLE_SIZE 101
 
-typedef struct _HashNode
-{
+typedef struct _HashNode {
 	void *element;
 	struct _HashNode *next;
 } HashNode;
@@ -74,116 +71,156 @@ typedef struct _HashNode
 typedef HashNode** HashTable;
 
 HashTable init_table();
-void put_table_element(HashTable table, void *key, void *value, int (*hash_code)(void *key));
-HashNode *get_table_element(HashTable table, void *key, int (*hash_code)(void *key));
+void put_table_element(HashTable table, void *key, void *value,
+		int (*HashCode)(void *key));
+HashNode *get_table_element(HashTable table, void *key,
+		int (*HashCode)(void *key));
 void clear_table(HashTable table);
 
-/****************** ObjectType ******************/
+/****************** Scheme ******************/
+typedef struct _Num {
+	int isFix;
+	union {
+		long longValue;
+		double doubleValue;
+	};
+} Num;
 
-typedef enum 
-{
-	THE_EMPTY_LIST, 
-	BOOLEAN, 
-	SYMBOL, 
-	FIXNUM,
-	CHARACTER, 
-	STRING, 
-	PAIR, 
-	PRIMITIVE_PROC,
-	COMPOUND_PROC, 
-	INPUT_PORT, 
-	OUTPUT_PORT,
-	EOF_OBJECT
-} ObjectType;
+struct _Cell;
+struct _Scheme;
+typedef struct _Cell* (*ForeignFunc)(struct _Scheme *, struct _Cell *);
+typedef struct _Cell* (*OperatorFunc)(struct _Scheme *);
 
-/****************** Object ******************/
+typedef struct _Pair {
+	struct _Cell *_car;
+	struct _Cell *_cdr;
+} Pair;
 
-typedef struct _Object 
-{
-    ObjectType type;
-    union 
-	{
-        struct 
-		{
-            int value;
-        } boolean;
-        struct 
-		{
-            String value;
-        } symbol;
-        struct 
-		{
-            long value;
-        } fixnum;
-        struct 
-		{
-            char value;
-        } character;
-        struct 
-		{
-            String value;
-        } string;
-        struct 
-		{
-            struct _Object *car;
-            struct _Object *cdr;
-        } pair;
-        struct 
-		{
-            struct _Object *(*fn)(struct _Object *arguments);
-        } primitive_proc;
-        struct 
-		{
-            struct _Object *parameters;
-            struct _Object *body;
-            struct _Object *env;
-        } compound_proc;
-        struct 
-		{
-            FILE *stream;
-        } input_port;
-        struct 
-		{
-            FILE *stream;
-        } output_port;
-    } data;
-} Object;
+typedef struct _Port {
+	unsigned char kind;
+	union {
+		struct {
+			FILE *file;
+			char *filename;
+			int curLine;
+			int closed;
+		} filePort;
+		struct {
+			char *start;
+			char *end;
+			char *cur;
+		} stringPort;
+	};
+} Port;
 
-Object *init_object();
+enum PortSubclass {
+	PORT_FREE = 0,
+	PORT_FILE = 1,
+	PORT_STRING = 2,
+	PORT_CAN_REALLOC = 4,
+	PORT_INPUT = 16,
+	PORT_OUTPUT = 32,
+	PORT_EOF = 64
+};
+
+typedef struct _Cell {
+	unsigned int _flag;
+	union {
+		Num _num;
+		char *_string;
+		OperatorFunc _op;
+		ForeignFunc _func;
+		Pair _pair;
+		Port *_port;
+	};
+} Cell;
+
+#define CELL_SEGSIZE 5000	 /* # of cells in one segment */
+#define CELL_NSEGMENT 100    /* # of segments for cells */
+#define STR_BUFF_SIZE 1024
+
+typedef struct _Scheme {
+	Cell* cellSeg[CELL_NSEGMENT];
+	int lastCellSeg;
+	Cell* freeCell; /* cell* to top of free cells */
+	long freeCellCount; /* # of free cells */
+
+	/* We use 4 registers. */
+	OperatorFunc op;							//当前处理方法
+	Cell* args; /* register for arguments of function */
+	Cell* env;  /* stack register for current environment */
+	Cell* code; /* register for current code */
+	Cell* callStack; /* stack register for next evaluation */
+	Cell* returnValue;
+	//int nesting;
+
+	//端口管理
+	Cell* inPort;
+	Cell* outPort;
+	Port* curPort;
+
+	Cell* objectList; /* cell* to symbol table *///管理所有的符号，确保了所有相同名字的符号是同一个
+	Cell* globalEnv; /* cell* to global environment */
+
+	int token;						//保持词法分析获取的单词
+	char stringBuffer[STR_BUFF_SIZE];
+
+	/* global cell*s to special symbols */
+	Cell* sym_lambda; /* cell* to syntax lambda */
+	Cell* sym_quote; /* cell* to syntax quote */			//引用    '
+	Cell* sym_qquote; /* cell* to symbol quasiquote */			//准引用 `
+	Cell* sym_unquote; /* cell* to symbol unquote */			//解引用 ,
+	Cell* sym_unquote_sp; /* cell* to symbol unquote-splicing *///解引用 ,@
+	Cell* sym_feed_to; /* => */							// cond中有用到
+	Cell* sym_colon_hook; /* *colon-hook* */
+	Cell* sym_error_hook; /* *error-hook* */
+	Cell* sym_sharp_hook; /* *sharp-hook* */
+	Cell* sym_compile_hook; /* *compile-hook* */
+} Scheme;
+
+/****************** Input ******************/
+
+typedef struct _Input {
+	int isFile;
+	union {
+		FILE *file;
+		struct {
+			String buffer;
+			int pointer;
+		} string;
+	};
+} Input;
 
 /****************** StatementType ******************/
 
-typedef enum 
-{
-	SYM,
-	ARG,
-	LOOP
-}StatementType;
+typedef enum {
+	SYM, ARG, LOOP
+} StatementType;
 
 /****************** Statement ******************/
 
-typedef struct _Statement
-{
+typedef struct _Statement {
 	String symbol;
-	StatementType type;		//1-SYM, 2-ARG, 3-LOOP, 4-EPSILON
+	StatementType type;		//1-SYM, 2-ARG, 3-LOOP
 	Queue *children;		//element is struct _Statement
-}Statement;
+} Statement;
 
 Statement *init_sym(String symbol);
 Statement *init_arg();
 Statement *init_loop();
 int is_sym(String token);
+int equal_sym(Statement *s, String sym);
+int equal_arg(Statement *s, String sym);
 int empty_statement(Statement *s);
 int equal_statement(Statement *a, Statement *b);
 String to_string_statement(Statement *s);
 
 /****************** ReplaceQueue ******************/
 
-typedef struct _ReplaceNode
-{
+typedef struct _ReplaceNode {
 	Statement *source;
 	Statement *target;
-}ReplaceNode;
+} ReplaceNode;
 
 void add_replace_statement(Queue *queue, Statement *source, Statement *target);
 Statement *find_replace_statement(Queue *queue, Statement *source);
@@ -191,18 +228,16 @@ Queue *find_loop_replace_statement(Queue *queue, Statement *source);
 
 /****************** State ******************/
 
-typedef struct _State
-{
+typedef struct _State {
 	int id;
 	int accept;
-}State;
+} State;
 
-typedef struct _TransitNode
-{
+typedef struct _TransitNode {
 	State *starter;
 	Statement *input;
 	State *next;
-}TransitNode;
+} TransitNode;
 
 State *to_dfa(Statement *s);
 State *transit(State *starter, State *start, Statement *input, Queue *repQueue);
@@ -211,14 +246,13 @@ int hash_code_state(void *s);
 
 /****************** Mapping ******************/
 
-typedef struct _SysBlock
-{
+typedef struct _SysBlock {
+	String name;
 	String prepare;
 	String eval;
-}SysBlock;
+} SysBlock;
 
-typedef struct _Mapping
-{
+typedef struct _Mapping {
 	SysBlock *sys;
 	String source;
 	String target;
@@ -227,6 +261,8 @@ typedef struct _Mapping
 	Statement *sourceStatement;
 	Statement *targetStatement;
 	State *starter;
-}Mapping;
+} Mapping;
+
+Mapping *get_sys_mapping(Queue *mappings, String name);
 
 #endif // _DS_H_

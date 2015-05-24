@@ -1,50 +1,97 @@
-;;;;;;;;;;;;;;;;;;
-; core template
-;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; Funny Language - a free style programming language.
+;; Copyright (C) 2014 by fanguangping. Email: fguangping@gmail.com
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-{define template {cond}: 
- {for the conditions: [when {when_clause} then {then_clause},]* } as
- {(cond [({when_clause} {then_clause})]*)}}
+{define template {make-closure}:
+ {make closure {closure}} as
+ {(make-closure {closure})}}
 
-{define template {set}:
- {set {x} as {y}} as
- {(set! {x} {y})}}
+{define template {defined?}:
+ {variable {var} is defined?} as
+ {(defined? {var})}}
 
-{define template {and}:
- {{x} and {y}} as
- {(and {x} {y})}}
+{define template {defined-in-env?}:
+ {variable {var} is defined in {env}?} as
+ {(defined? {var} {env})}}
 
-{define template {or}:
- {{x} or {y}} as
- {(or {x} {y})}}
+{define template {eval}:
+ {eval {code} in {env}} as
+ {(eval {code} {env})}}
 
-{define template {and...}:
- {{x} and... [{y}]*} as
- {(and {x} [{y}]*)}}
+{define template {apply}:
+ {apply {function} to {list}} as
+ {(apply {function} {list})}}
 
-{define template {or...}:
- {{x} or... [{y}]*} as
- {(or {x} [{y}]*)}}
+{define template {call-cc}:
+ {call with current continuation {continuation}} as
+ {(call-with-current-continuation {continuation})}}
 
-{define template {true}:
- {true} as
- {#t}}
+{define template {inexact->exact}:
+ {convert {x} from inexact to exact} as
+ {(inexact->exact {x})}}
 
-{define template {false}:
- {false} as
- {#f}}
+{define template {exp}:
+ {exp {x}} as
+ {(exp {x})}}
 
-{define template {eq?}: 
- {{a} equals {b} ?} as
- {(eq? {a} {b})}}
+{define template {log}:
+ {log {x}} as
+ {(log {x})}}
 
-{define template {null?}: 
- {{a} is null?} as
- {(null? {a})}}
+{define template {sin}:
+ {sin {x}} as
+ {(sin {x})}}
 
-{define template {pair?}: 
- {{a} is pair?} as
- {(pair? {a})}}
+{define template {cos}:
+ {cos {x}} as
+ {(cos {x})}}
+
+{define template {tan}:
+ {tan {x}} as
+ {(tan {x})}}
+
+{define template {asin}:
+ {asin {x}} as
+ {(asin {x})}}
+
+{define template {acos}:
+ {acos {x}} as
+ {(acos {x})}}
+
+{define template {atan}:
+ {atan {x}} as
+ {(atan {x})}}
+
+{define template {atan2}:
+ {atan {x} {y}} as
+ {(atan {x} {y})}}
+
+{define template {sqrt}:
+ {sqrt {x}} as
+ {(sqrt {x})}}
+
+{define template {expt}:
+ {expt {x} {y}} as
+ {(expt {x} {y})}}
+
+{define template {floor}:
+ {floor {x}} as
+ {(floor {x})}}
+
+{define template {ceiling}:
+ {ceiling {x}} as
+ {(ceiling {x})}}
+
+{define template {truncate}:
+ {truncate {x}} as
+ {(truncate {x})}}
+
+{define template {round}:
+ {round {x}} as
+ {(round {x})}}
 
 {define template {+}:
  {{x}+{y}} as
@@ -66,6 +113,154 @@
  {{x}/{y}} as
  {(/ {x} {y})}}
 
+{define template {sum}:
+ {sum of [{x}]} as
+ {(+ [{x}])}}
+
+{define template {product}:
+ {product of [{x}]} as
+ {(* [{x}])}}
+
+{define template {quotient}:
+ {quotient of [{x}]} as
+ {(quotient [{x}])}}
+
+{define template {remainder}:
+ {{x} remainder {y}} as
+ {(remainder {x} {y})}}
+
+{define template {modulo}:
+ {{x} modulo {y}} as
+ {(modulo {x} {y})}}
+
+{define template {car}:
+ {first of {expr}} as
+ {(car {expr})}}
+
+{define template {cdr}:
+ {rest of {expr}} as
+ {(cdr {expr})}}
+
+{define template {cons}:
+ {construct pair {a} {b}} as
+ {(cons {a} {b})}}
+
+{define template {set-car!}:
+ {set {car} as first part of {expr}} as
+ {(set-car! {expr} {car})}}
+
+{define template {set-cdr!}:
+ {set {cdr} as rest part of {expr}} as
+ {(set-cdr! {expr} {cdr})}}
+
+{define template {char->integer}:
+ {convert char {char} to integer} as
+ {(char->integer {char})}}
+
+{define template {integer->char}:
+ {convert integer {integer} to char} as
+ {(integer->char {integer})}}
+
+{define template {char-upcase}:
+ {convert char {char} to upcase} as
+ {(char-upcase {char})}}
+
+{define template {char-downcase}:
+ {convert char {char} to downcase} as
+ {(char-downcase {char})}}
+
+{define template {symbol->string}:
+ {convert symbol {symbol} to string} as
+ {(symbol->string {symbol})}}
+
+{define template {atom->string}:
+ {convert atom {atom} to string} as
+ {(atom->string {atom})}}
+
+{define template {num->string}:
+ {convert num {num} to string based by {base}} as
+ {(atom->string {num} {base})}}
+
+{define template {string->symbol}:
+ {convert string {string} to symbol} as
+ {(string->symbol {string})}}
+
+{define template {string->atom}:
+ {convert string {string} to atom} as
+ {(string->atom {string})}}
+
+{define template {string->num}:
+ {convert string {string} to num based by {base}} as
+ {(string->atom {string} {base})}}
+
+{define template {make-string}:
+ {make string filled with char {c} for length {n}} as
+ {(make-string {n} {c})}}
+
+{define template {string-length}:
+ {length of string {string}} as
+ {(string-length {string})}}
+
+{define template {string-ref}:
+ {char at {index} from {string}} as
+ {(string-ref {string} {index})}}
+
+{define template {string-set!}:
+ {set char {char} at {index} for {string}} as
+ {(string-set! {string} {index} {char})}}
+
+{define template {string-append}:
+ {append string {x} [{y}]} as
+ {(string-append {x} [{y}])}}
+
+{define template {substring}:
+ {substring {string} from {begin} to {end}} as
+ {(substring {string} {begin} {end})}}
+
+{define template {vector}:
+ {append vector {x} [{y}]} as
+ {(vector {x} [{y}])}}
+
+{define template {make-vector}:
+ {make string filled with element {e} for length {n}} as
+ {(make-vector {n} {e})}}
+
+{define template {vector-length}:
+ {length of vector {vector}} as
+ {(vector-length {vector})}}
+
+{define template {vector-ref}:
+ {element at {index} from {vector}} as
+ {(vector-ref {vector} {index})}}
+
+{define template {vector-set!}:
+ {set element {e} at {index} for {vector}} as
+ {(vector-set! {vector} {index} {e})}}
+
+{define template {not}:
+ {not {x}} as
+ {(not {x})}}
+
+{define template {true}:
+ {true} as
+ {#t}}
+
+{define template {false}:
+ {false} as
+ {#f}}
+
+{define template {boolean?}:
+ {{x} is boolean?} as
+ {(boolean? {x})}}
+
+{define template {eof-object?}:
+ {{x} is end of file?} as
+ {(eof-object? {x})}}
+
+{define template {null?}:
+ {{x} is null?} as
+ {(null? {x})}}
+
 {define template {=}:
  {{x}={y}} as
  {(= {x} {y})}}
@@ -86,17 +281,306 @@
  {{x}<={y}} as
  {(<= {x} {y})}}
 
-{define template {car}:
- {first of {expr}} as
- {(car {expr})}}
+{define template {symbol?}:
+ {{x} is symbol?} as
+ {(symbol? {x})}}
 
-{define template {cdr}:
- {rest of {expr}} as
- {(cdr {expr})}}
+{define template {number?}:
+ {{x} is number?} as
+ {(number? {x})}}
 
-{define template {cons}:
- {construct list {a} {b}} as
- {(cons {a} {b})}}
+{define template {string?}:
+ {{x} is string?} as
+ {(string? {x})}}
 
+{define template {integer?}:
+ {{x} is integer?} as
+ {(integer? {x})}}
 
+{define template {real?}:
+ {{x} is real?} as
+ {(real? {x})}}
 
+{define template {char?}:
+ {{x} is char?} as
+ {(char? {x})}}
+
+{define template {char-alphabetic?}:
+ {{x} is alphabetic char?} as
+ {(char-alphabetic? {x})}}
+
+{define template {char-numeric?}:
+ {{x} is numeric char?} as
+ {(char-numeric? {x})}}
+
+{define template {char-whitespace?}:
+ {{x} is whitespace char?} as
+ {(char-whitespace? {x})}}
+
+{define template {char-upper-case?}:
+ {{x} is upper case char?} as
+ {(char-upper-case? {x})}}
+
+{define template {char-lower-case?}:
+ {{x} is lower case char?} as
+ {(char-lower-case? {x})}}
+
+{define template {port?}:
+ {{x} is port?} as
+ {(port? {x})}}
+
+{define template {input-port?}:
+ {{x} is input port?} as
+ {(input-port? {x})}}
+
+{define template {output-port?}:
+ {{x} is output port?} as
+ {(output-port? {x})}}
+
+{define template {procedure?}:
+ {{x} is procedure?} as
+ {(procedure? {x})}}
+
+{define template {pair?}:
+ {{x} is pair?} as
+ {(pair? {x})}}
+
+{define template {list?}:
+ {{x} is list?} as
+ {(list? {x})}}
+
+{define template {environment?}:
+ {{x} is environment?} as
+ {(environment? {x})}}
+
+{define template {vector?}:
+ {{x} is vector?} as
+ {(vector? {x})}}
+
+{define template {eq?}:
+ {{x} equals {y}?} as
+ {(eq? {x} {y})}}
+
+{define template {eqv?}:
+ {{x}'s value equals {y}?} as
+ {(eqv? {x} {y})}}
+
+;; force delay cons-stream
+
+{define template {write}:
+ {write {expr}} as
+ {(write {expr})}}
+
+{define template {write-port}:
+ {write {expr} to {outport}} as
+ {(write {expr} {outport})}}
+
+{define template {write-char}:
+ {write-char {char}} as
+ {(write-char {char})}}
+
+{define template {write-char-port}:
+ {write-char {char} to {outport}} as
+ {(write-char {char} {outport})}}
+
+{define template {display}:
+ {display {expr}} as
+ {(display {expr})}}
+
+{define template {display-port}:
+ {display {expr} to {outport}} as
+ {(display {expr} {outport})}}
+
+{define template {newline}:
+ {write newline} as
+ {(newline)}}
+
+{define template {newline-port}:
+ {write newline to {outport}} as
+ {(newline {outport})}}
+
+{define template {error}:
+ {write error [{err}]} as
+ {(error [{err}])}}
+
+{define template {reverse}:
+ {reverse list {list}} as
+ {(reverse {list})}}
+
+{define template {list*}:
+ {list elements [{e}]} as
+ {(list* [{e}])}}
+
+{define template {append}:
+ {append lists [{e}]} as
+ {(append [{e}])}}
+
+{define template {quit}:
+ {quit} as
+ {(quit)}}
+
+{define template {gc}:
+ {garbage collection} as
+ {(gc)}}
+
+{define template {new-segment}:
+ {new {num} segments} as
+ {(new-segment {num})}}
+
+{define template {oblist}:
+ {list objects} as
+ {(oblist)}}
+
+{define template {current-input-port}:
+ {current input port} as
+ {(current-input-port)}}
+
+{define template {current-output-port}:
+ {current output port} as
+ {(current-output-port)}}
+
+{define template {open-input-file}:
+ {open input file {file}} as
+ {(open-input-file {file})}}
+
+{define template {open-output-file}:
+ {open output file {file}} as
+ {(open-output-file {file})}}
+
+{define template {open-input-output-file}:
+ {open input-output file {file}} as
+ {(open-input-output-file {file})}}
+
+{define template {open-input-string}:
+ {open input string {string}} as
+ {(open-input-string {string})}}
+
+{define template {open-output-string}:
+ {open output string {string}} as
+ {(open-output-string {string})}}
+
+{define template {open-input-output-string}:
+ {open input-output string {string}} as
+ {(open-input-output-string {string})}}
+
+{define template {get-output-string}:
+ {get output string from {port}} as
+ {(get-output-string {port})}}
+
+{define template {close-input-port}:
+ {close input port {port}} as
+ {(close-input-port {port})}}
+
+{define template {close-output-port}:
+ {close output port {port}} as
+ {(close-output-port {port})}}
+
+{define template {interaction-environment}:
+ {interaction environment} as
+ {(interaction-environment)}}
+
+{define template {current-environment}:
+ {current environment} as
+ {(current-environment)}}
+
+{define template {read}:
+ {read expression} as
+ {(read)}}
+
+{define template {read-port}:
+ {read expression from {port}} as
+ {(read {port})}}
+
+{define template {read-char}:
+ {read char} as
+ {(read-char)}}
+
+{define template {read-char-port}:
+ {read char from {port}} as
+ {(read-char {port})}}
+
+{define template {peek-char}:
+ {peek char} as
+ {(peek-char)}}
+
+{define template {peek-char-port}:
+ {peek char from {port}} as
+ {(peek-char {port})}}
+
+{define template {char-ready?}:
+ {is char ready?} as
+ {(char-ready?)}}
+
+{define template {set-input-port}:
+ {set input port {port}} as
+ {(set-input-port {port})}}
+
+{define template {set-output-port}:
+ {set output port {port}} as
+ {(set-output-port {port})}}
+
+{define template {length}:
+ {the length of {list}} as
+ {(length {list})}}
+
+{define template {assq}:
+ {the value of {key} in association list {alist}} as
+ {(assq {key} {alist})}}
+
+{define template {get-closure-code}:
+ {get closure {closure}'s code} as
+ {(get-closure-code {closure})}}
+
+{define template {closure?}:
+ {{x} is closure?} as
+ {(closure? {x})}}
+
+{define template {macro?}:
+ {{x} is macro} as
+ {(macro? {x})}}
+
+;;;
+
+{define template {if}:
+ {if {if_clause} then {then_clause}} as
+ {(if {if_clause} {then_clause})}}
+
+{define template {if-else}:
+ {if {if_clause} then {then_clause}, else {else_clause}} as
+ {(if {if_clause} {then_clause} {else_clause})}}
+
+{define template {begin}:
+ {begin procedure [{x}]} as
+ {(begin [{x}])}}
+
+{define template {set}:
+ {set {x} as {y}} as
+ {(set! {x} {y})}}
+
+{define template {let}:
+ {let [{var}={value},] eval: [{expr}]} as
+ {(let ([({var} {value})]) [({expr})])}}
+
+;;; let* letrec
+
+{define template {cond}: 
+ {for the conditions: [when {when_clause} then {then_clause},]} as
+ {(cond [({when_clause} {then_clause})])}}
+
+{define template {and}:
+ {{x} and {y}} as
+ {(and {x} {y})}}
+
+{define template {or}:
+ {{x} or {y}} as
+ {(or {x} {y})}}
+
+{define template {and...}:
+ {{x} and... [{y}]*} as
+ {(and {x} [{y}]*)}}
+
+{define template {or...}:
+ {{x} or... [{y}]*} as
+ {(or {x} [{y}]*)}}
+
+;;; case

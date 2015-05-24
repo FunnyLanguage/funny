@@ -1,0 +1,67 @@
+;;;;;;;;;;;;;;;;;;
+; core template
+;;;;;;;;;;;;;;;;;;
+
+{define template {run-cmd}:
+ {run command {cmd} [{other-cmd}]} as
+ {(system {cmd} [{other-cmd}])}}
+
+{define template {pipe-cmd}:
+ {pipe command {cmd} [{other-cmd}]} as
+ {(pipe {cmd} [{other-cmd}])}}
+
+{define template {cmd-cd}:
+ {change directory to {path}} as
+ {(string-append "cd " {path})}}
+
+{define template {cmd-ls-file}:
+ {list file} as
+ {(string-append "ls -l")}}
+
+{define template {cmd-ls-file-recur}:
+ {list file recursively} as
+ {(string-append "ls -lR")}}
+
+{define template {cmd-ls-dir}:
+ {list directory} as
+ {(string-append "ls -ld")}}
+
+{define template {cmd-grep}:
+ {search regex {regex}} as
+ {(string-append "grep " {regex})}}
+
+{define template {cmd-grep-i}:
+ {search regex {regex}, ignore case} as
+ {(string-append "grep -i " {regex})}}
+
+{define template {cmd-cp}:
+ {copy file from {src} to {dest}} as
+ {(string-append "cp " {src} " " {dest})}}
+
+{define template {cmd-cp-r}:
+ {copy file from {src} to {dest}, recursively} as
+ {(string-append "cp -r " {src} " " {dest})}}
+
+{define template {cmd-mv}:
+ {move file from {src} to {dest}} as
+ {(string-append "mv " {src} " " {dest})}}
+
+{define template {cmd-rm}:
+ {remove file or directory {path}} as
+ {(string-append "rm -rf " {path})}}
+
+{define template {cmd-ps}:
+ {show all process} as
+ {(string-append "ps -aux")}}
+
+{define template {cmd-kill}:
+ {kill process {pid}} as
+ {(string-append "kill -signal " {pid})}}
+
+{define template {cmd-tar}:
+ {create archive {filename} from {src}} as
+ {(string-append "tar -jcvf " {filename} " " {src})}}
+
+{define template {cmd-tar-x}:
+ {decompress archive {filename} to {dest}} as
+ {(string-append "tar -jxvf " {filename} " -C " {dest})}}

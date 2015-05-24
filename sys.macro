@@ -1,20 +1,30 @@
-$$ sys.macro
 $$
-$$ system macro statement
+$$ Funny Language - a free style programming language.
+$$ Copyright (C) 2014 by fanguangping. Email: fguangping@gmail.com
 $$
 
+$$ example: {define template {or}: {{x} or {y}} as {(or {x} {y})}}
 statement: {define template {name}: {template} as {statement}}
-> ^{name}, {template} > %{statement}, {statement}
-= NIL
+name: deftpl
+prepare: EXTRACT[{name}], {template} > FUNCNAME[{statement}], {statement}
+eval: NIL
 
+$$ example: {define {abc} as {123}}
 statement: {define {var} as {val}}
-> NIL
-= (define ^{var} ^{val})
+name: defvar
+prepare: NIL
+eval: (define EXTRACT[{var}] EXTRACT[{val}])
 
+$$ example: {define function {qsum}: {the sum of squares {a} and {b}} as {{{a}*{a}}+{{b}*{b}}}}
 statement: {define function {name}: {function} as {statement}}
-> ^{name}, {function} > ^{name}, \{(^{name} #{function})\}
-= (define (^{name} &{function}) @{statement})
+name: defun
+prepare: EXTRACT[{name}], {function} > EXTRACT[{name}], \{(EXTRACT[{name}] TARGET[{function}])\}
+eval: (define (EXTRACT[{name}] ARGLIST[{function}]) MATCH[{statement}])
 
+$$ example: {lambda {a b c}: {{a}+{b}+{c}}}
 statement: {lambda {args}: {expression}}
-> NIL
-= (lambda (^{args}) @{expression})
+name: lambda
+prepare: NIL
+eval: (lambda (EXTRACT[{args}]) MATCH[{expression}])
+
+
