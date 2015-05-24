@@ -9,38 +9,38 @@
     
 下面是泛语言在RHEL上运行的几个示例：  
 
-[root@192 funny]# ./funny
-Welcome to FUNNY programming world. Type {exit} to exit.
-> {define function {qsum}:
-      {the sum of squares {a} and {b}} as
-        {{{a}*{a}}+{{b}*{b}}}}
-qsum
-> {the sum of squares {2} and {3}}
-13
-> {define function {abs}: 
-      {the absolute value of {x}} as 
-        {for the conditions: 
-           when {{x}>{0}} then {x},
-           when {{x}={0}} then {0},
-           when {{x}<{0}} then {-{x}}}}
-abs
-> {the absolute value of {-2}}
-2
-> {the sum of squares {2} and {the absolute value of {-2}}}
-8
-> {the absolute value of {the sum of squares {2} and {-3}}}
-13
-> {define function {copy-files}:
-  {copy files {n} times from {src} to {dest}} as
-    {if {{n}>{0}} then {begin procedure 
-       {run command {copy file from {src} to {append string {dest} {convert atom {n} to string}}}} 
-       {copy files {{n}-{1}} times from {src} to {dest}}}}}
-copy-files
-> {copy files {4} times from {"/home/fgp/temp/abc"} to {"/home/fgp/temp/def"}}
-()
-> {exit}
-Goodbye!
-[root@192 funny]#
+	[root@192 funny]# ./funny
+	Welcome to FUNNY programming world. Type {exit} to exit.
+	> {define function {qsum}:
+	      {the sum of squares {a} and {b}} as
+	        {{{a}*{a}}+{{b}*{b}}}}
+	qsum
+	> {the sum of squares {2} and {3}}
+	13
+	> {define function {abs}: 
+	      {the absolute value of {x}} as 
+	        {for the conditions: 
+	           when {{x}>{0}} then {x},
+	           when {{x}={0}} then {0},
+	           when {{x}<{0}} then {-{x}}}}
+	abs
+	> {the absolute value of {-2}}
+	2
+	> {the sum of squares {2} and {the absolute value of {-2}}}
+	8
+	> {the absolute value of {the sum of squares {2} and {-3}}}
+	13
+	> {define function {copy-files}:
+	  {copy files {n} times from {src} to {dest}} as
+	    {if {{n}>{0}} then {begin procedure 
+	       {run command {copy file from {src} to {append string {dest} {convert atom {n} to string}}}} 
+	       {copy files {{n}-{1}} times from {src} to {dest}}}}}
+	copy-files
+	> {copy files {4} times from {"/home/fgp/temp/abc"} to {"/home/fgp/temp/def"}}
+	()
+	> {exit}
+	Goodbye!
+	[root@192 funny]#
 
 希望大家能喜欢上这门语言，并带动它发展！  
 
