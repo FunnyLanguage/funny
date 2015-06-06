@@ -13,7 +13,7 @@ $$ example: {define {abc} as {123}}
 statement: {define {var} as {val}}
 name: defvar
 prepare: NIL
-eval: (define EXTRACT[{var}] EXTRACT[{val}])
+eval: (define EXTRACT[{var}] MATCH[{val}])
 
 $$ example: {define function {qsum}: {the sum of squares {a} and {b}} as {{{a}*{a}}+{{b}*{b}}}}
 statement: {define function {name}: {function} as {statement}}
