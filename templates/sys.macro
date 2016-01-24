@@ -1,0 +1,35 @@
+$$
+$$ Funny Language - a free style programming language.
+$$ Copyright (C) 2015 by fanguangping. Email: fguangping@gmail.com
+$$
+
+$$ example: {define template {or}: {{x} or {y}} as {(or {x} {y})}}
+statement: {define template {name}: {template} as {statement}}
+name: deftpl
+prepare: EXTRACT[{name}], {template} > FUNCNAME[{statement}], {statement}
+eval: NIL
+
+$$ example: {define {abc} as {123}}
+statement: {define {var} as {val}}
+name: defvar
+prepare: NIL
+eval: (define EXTRACT[{var}] MATCH[{val}])
+
+$$ example: {define function {qsum}: {the sum of squares {a} and {b}} as {{{a}*{a}}+{{b}*{b}}}}
+statement: {define function {name}: {function} as {statement}}
+name: defun
+prepare: EXTRACT[{name}], {function} > EXTRACT[{name}], \{(EXTRACT[{name}] TARGET[{function}])\}
+eval: (define (EXTRACT[{name}] ARGLIST[{function}]) MATCH[{statement}])
+
+$$ example: {lambda {a b c}: {{a}+{b}+{c}}}
+statement: {lambda {args}: {expression}}
+name: lambda
+prepare: NIL
+eval: (lambda (EXTRACT[{args}]) MATCH[{expression}])
+
+$$ example: {define macro {set {var} to nil} as {set {var} to {nil}}}
+statement: {define macro {template} as {statement}}
+name: defmacro
+prepare: NIL, {template} > NIL, {statement}
+eval: NIL
+
