@@ -1,3 +1,7 @@
 project(funny)
 cmake_minimum_required(VERSION 2.8)
 add_subdirectory(src)
+install(FILES templates/sys.macro DESTINATION funny)
+install(FILES templates/core.fn templates/command.fn DESTINATION funny/templates)
+set(ENV{FUNNY_HOME} /usr/local/funny)
+set(ENV{PATH} $FUNNY_HOME/bin:$PATH)
