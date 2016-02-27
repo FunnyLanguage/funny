@@ -1,0 +1,6 @@
+
+{define function {qsum}:
+  {the sum of squares {a} and {b}} as
+  {{{a}*{a}}+{{b}*{b}}}}
+
+{the sum of squares {2} and {3}}

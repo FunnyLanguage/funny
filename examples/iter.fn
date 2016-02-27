@@ -1,0 +1,6 @@
+
+{define function {iter}:
+  {iter of {n}} as
+  {if {{n}<{1}} then {1}, else {{iter of {{n}-{1}}}*{2}}}}
+
+{iter of {3}}

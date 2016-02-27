@@ -1,0 +1,3 @@
+{define macro {start program {p}} as {p}}
+{define macro {start program {p} [{q}]} as {let {$temp}={p}, eval: {start program [{q}]}}}
+{start program {{1} + {2}} {{3} * {4}}}

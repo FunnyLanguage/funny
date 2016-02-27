@@ -1,0 +1,35 @@
+
+{define function {square}:
+  {square of {x}} as
+  {{x}*{x}}}
+
+{define function {abs}: 
+  {the absolute value of {x}} as 
+  {for the conditions: 
+     when {{x}>{0}} then {x},
+     when {{x}={0}} then {0},
+     when {{x}<{0}} then {-{x}}}}
+
+{define function {ave}:
+  {the average value of {a} and {b}} as
+  {{{a}+{b}}/{2}}}
+
+{define function {improve}:
+  {{guess} improve for {x}} as
+  {the average value of {guess} and {{x}/{guess}}}}
+
+{define function {near}:
+  {{guess} near {x}} as
+  {{the absolute value of {{square of {guess}}-{x}}}<{0.000001}}}
+
+{define function {sqrt-iter}:
+  {the sqrt iterator of {x} and {guess}} as
+  {if {{guess} near {x}} then {guess}, 
+   else {the sqrt iterator of {x} and {{guess} improve for {x}}}}}
+
+{define function {sqrt}:
+  {sqrt of {x}} as
+  {the sqrt iterator of {x} and {1.0}}}
+
+{sqrt of {2}}
+

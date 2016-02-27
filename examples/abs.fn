@@ -1,0 +1,10 @@
+
+{define function {abs}: 
+  {the absolute value of {x}} as 
+  {for the conditions: 
+     when {{x}>{0}} then {x},
+     when {{x}={0}} then {0},
+     when {{x}<{0}} then {-{x}},}}
+
+{the absolute value of {-2}}
+
