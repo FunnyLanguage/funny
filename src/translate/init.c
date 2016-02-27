@@ -44,7 +44,7 @@ void load() {
 
 	parse_sys_macro(sysMacro);
 	load_template(coreTemplate);
-	load_template(sysTemplate);
+	//load_template(sysTemplate);
 	//load_template(CMD_TEMPLATE);
 	//load_template(GUI_TEMPLATE);
 	//load_template(DB_TEMPLATE);
